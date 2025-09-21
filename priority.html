@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Priority Tasks - To-Do List</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="fevicon.png">
+</head>
+
+<body>
+    <header class="header">
+        <div class="logo">
+            <img src="image/logo2.png" alt="">
+        </div>
+        <div class="name">
+            <h1>To-Do List</h1>
+        </div>
+        <div class="nav">
+            <ul>
+                <li>
+                    <form id="searchForm">
+                        <input type="search" id="searchInput" placeholder="Search tasks...">
+                        <button type="submit">🔍</button>
+                    </form>
+                </li>
+                <li><button id="pdfBtn">⬇️ PDF</button></li>
+                <li><a href="#" id="notifyBtn">🔔</a></li>
+                <li><a href="login.html" id="profileBtn">👤</a></li>
+            </ul>
+        </div>
+    </header>
+    
+
+    <div class="sidebaar">
+        <aside class="sidebar">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="all.html">All Task</a></li>
+                <li><a href="today.html">Today</a></li>
+                <li><a href="upcoming.html">Upcoming</a></li>
+                <li><a href="priority.html">Priority</a></li>
+               
+             
+            </ul>
+        </aside>
+
+        <div class="center">
+            <main>
+                <h1>Priority Tasks</h1>
+
+                <section class="high-priority">
+                    <h2>High Priority</h2>
+                    <ul id="high-list"></ul>
+                </section>
+
+                <section class="medium-priority">
+                    <h2>Medium Priority</h2>
+                    <ul id="medium-list"></ul>
+                </section>
+
+                <section class="low-priority">
+                    <h2>Low Priority</h2>
+                    <ul id="low-list"></ul>
+                </section>
+            </main>
+        </div>
+    </div>
+    
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="stats">📊 Pending: 0 | Completed: 0</div>
+            <div class="progress">⏳ Progress: 0%</div>
+            <div class="theme-toggle-wrapper">
+                <button id="theme-toggle">🌙 Theme Toggle</button>
+            </div>
+        </div>
+        <div class="tip">
+            <p>💡 "Tip: Small progress every day adds up to big results." </p>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+</body>
+
+</html>

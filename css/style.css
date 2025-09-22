@@ -10,15 +10,30 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 25px;
+  padding: 10px 20px;
   background: rgba(0, 0, 0, 0.5);
   color: #fff;
   border-bottom: 2px solid #0a84ff;
   position: sticky;
   top: 0;
   z-index: 1000;
+  flex-wrap: nowrap; /* important to prevent wrapping */
   height: 100px;
-  flex-wrap: wrap;
+  min-height: 70px;
+}
+
+.header-left {
+  padding-left: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 400px;
+  flex-shrink: 0; /* prevents shrinking on small screens */
+}
+
+.header-left h1 {
+  font-size: 1.8rem;
+  white-space: nowrap; /* prevent wrapping */
 }
 
 .logo img {
@@ -36,6 +51,23 @@
   font-weight: 700;
   color: white;
   letter-spacing: 1px;
+}
+
+/* ===== HAMBURGER MENU (Hidden on desktop, shown on mobile) ===== */
+.hamburger {
+  display: none; /* desktop hidden */
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.hamburger span {
+  width: 25px;
+  height: 3px;
+  background: white;
+  border-radius: 2px;
+  transition: all 0.3s;
 }
 
 /* ===== NAV ===== */
@@ -116,6 +148,9 @@
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
+  align-items: center; /* Center content horizontally */
+  justify-content: center; /* Center the whole container */
+  padding: 20px;
 }
 
 .sidebar {
@@ -140,13 +175,18 @@ aside {
   flex: 1 1 25%;
   color: white;
 }
+aside ul {
+  padding-left: 20px;
+  padding-top: 40px;
+}
 
 .center {
   flex: 5 1 70%;
   padding: 30px 20px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: center; /* Center content in column */
+  padding-top: 80px;
 }
 
 /* ===== MAIN TASK SECTION ===== */
@@ -263,7 +303,6 @@ aside {
   font-size: 14px;
 }
 
-
 /* ===== THEME TOGGLE ===== */
 .theme-toggle-wrapper {
   position: relative;
@@ -312,101 +351,338 @@ body.dark-mode main {
   color: #f1f1f1;
 }
 
-/* ===== TASK PAGE SECTIONS ===== */
-section {
-  margin-bottom: 20px;
-  max-height: 200px;
-  overflow-y: auto;
-  padding: 10px;
-  border-radius: 10px;
-  background-color: #f9f9f9;
-}
-
-section h2 {
-  color: #1e90ff;
-  border-bottom: 1px solid #ccc;
-  padding-bottom: 5px;
-  margin-bottom: 10px;
-}
-
-li {
-  margin: 5px 0;
-  padding: 10px;
-  border-radius: 5px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-weight: 500;
-}
-
-.priority {
-  font-weight: bold;
-  margin-left: 10px;
-  color: #333;
-}
-
-/* ===== LISTS CONTAINER ===== */
-#lists-container {
-  margin-top: 20px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 15px;
-}
-
-.list {
-  border: 1px solid #ccc;
-  padding: 15px;
-  border-radius: 10px;
-  background-color: #f9f9f9;
-}
-
-.list ul {
-  margin-top: 10px;
-  padding-left: 20px;
-}
-
-/* ===== RESPONSIVE ===== */
+/* Tablet/Small Desktop (768px and below) */
 @media (max-width: 768px) {
+  /* Header: Keep in one row, reduce gaps, add hamburger */
   .header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
+    flex-direction: row;
+    align-items: center; /* Center align */
+    gap: 10px;
+    padding: 10px;
     height: auto;
+    min-height: 60px;
+  }
+
+  .header-left {
+    padding-left: 20px;
+    gap: 20px; /* Reduce large gap */
+    flex: 1;
+    justify-content: flex-start;
+  }
+
+  .name h1 {
+    font-size: 24px; /* Smaller font for mobile */
+  }
+
+  .logo img {
+    width: 60px; /* Smaller logo */
   }
 
   #searchInput {
-    width: 120px;
+    width: 150px;
   }
 
-  .sidebaar {
+  /* Show hamburger, hide nav by default */
+  .hamburger {
+    display: flex; /* show on mobile */
+  }
+
+  .nav {
+    display: none; /* Hidden by default on mobile */
+    position: absolute;
+    top: 100%; /* Below header */
+    left: 0;
+    width: 100%;
+    background: rgba(0,0,0,0.85);
     flex-direction: column;
+    align-items: center;
+    padding: 10px 0;
+    z-index: 999;
+  }
+
+  .nav.active {
+    display: flex; /* Show when toggled */
+  }
+
+  .nav ul {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+    align-items: center;
+    margin: 0;
+  }
+
+  .nav ul li {
+    width: 90%;
+    text-align: center;
+  }
+
+  /* Main content: Side by side (adjusted widths), centered */
+  .sidebaar {
+    flex-direction: row; /* Side by side */
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px;
+    justify-content: center; /* Center the row */
+    align-items: flex-start; /* Align to top for side-by-side */
+  }
+
+  .sidebar {
+    flex: 0 0 30%; /* Fixed width for side by side */
+    max-width: 30%;
+    padding: 5px;
+  }
+
+  aside {
+    flex: 0 0 30%; /* Side by side with sidebar */
+    max-width: 30%;
+    padding: 5px;
+  }
+
+  aside ul {
+    padding-left: 10px;
+    padding-top: 20px;
+  }
+
+  .center {
+    flex: 0 0 40%; /* Remaining space for center */
+    max-width: 40%;
+    padding: 10px;
+    padding-top: 60px; /* Adjust for header */
+    align-items: center;
   }
 
   .main {
     width: 100%;
-    min-height: 400px;
-  }
-
-  section {
-    max-height: 180px;
-  }
-}
-
-@media (max-width: 480px) {
-  .taskinput input[type="text"] {
-    font-size: 14px;
-  }
-
-  .tasklist ul li {
-    font-size: 14px;
-    padding: 8px;
-  }
-
-  .main {
+    max-width: 100%;
+    min-height: 300px;
     padding: 15px;
   }
 
   section {
-    max-height: 150px;
+    max-height: 180px;
+    padding: 8px;
+    margin-bottom: 10px;
   }
+
+  /* Footer: Ensure it stays at bottom, adjust padding */
+  .footer {
+    padding: 10px;
+  }
+
+  .footer-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  /* Ensure body has padding for fixed footer/header */
+  body {
+    padding-bottom: 60px; /* Space for footer */
+    padding-top: 70px; /* Space for sticky header */
+  }
+}
+
+/* Phone (480px and below) */
+@media (max-width: 480px) {
+  /* Header: Still one row, but stack if needed, smaller elements */
+  .header {
+    padding: 8px;
+    gap: 5px;
+  }
+
+    .header-left {
+    padding-left: 5px;
+    gap: 10px;
+    flex: 1;
+    justify-content: flex-start;
+  }
+
+  .name h1 {
+    font-size: 18px;
+  }
+
+  .logo img {
+    width: 40px;
+  }
+
+  #searchInput {
+    width: 80px;
+  }
+
+  /* Main content: Stack vertically, centered */
+  .sidebaar {
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .sidebar {
+    flex: 0 0 100%;
+    max-width: 100%;
+    padding: 5px;
+  }
+
+  aside {
+    flex: 0 0 100%;
+    max-width: 100%;
+    padding: 5px;
+  }
+
+  aside ul {
+    text-align: left;
+    align-items: flex-start;
+    padding-left: 10px;
+  }
+
+  .center {
+    flex: 0 0 100%;
+    max-width: 100%;
+    padding: 10px;
+    padding-top: 60px;
+    align-items: center;
+  }
+
+  .main {
+    width: 100%;
+    max-width: 100%;
+    min-height: 200px;
+    padding: 10px;
+  }
+
+  section {
+    max-height: 150px;
+    padding: 5px;
+    margin-bottom: 10px;
+  }
+
+  /* Footer: Ensure it stays at bottom, adjust padding */
+  .footer {
+    padding: 5px;
+  }
+
+  .footer-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+  }
+
+  /* Ensure body has padding for fixed footer/header */
+  body {
+    padding-bottom: 50px;
+    padding-top: 60px;
+  }
+}
+.center main {
+  margin-top: 10px;
+    width: 100%;
+    max-width: 600px;   
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border-radius: 20px;
+}
+.center main {
+    max-height: calc(100vh - 180px); /* 100vh minus header + footer */
+    overflow-y: auto;
+    padding-bottom: 20px;
+}
+
+center {
+    padding-bottom: 100px; /* space for footer so content won't overlap */
+}
+
+.center main section {
+    margin-bottom: 25px;
+}
+
+.center main section h2 {
+    font-size: 1.2rem;
+    margin-bottom: 12px;
+    color: white;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 6px;
+}
+
+.center main section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 400px; /* scrollable if too many tasks */
+    overflow-y: auto;
+}
+
+.center main section ul li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: transparent; /* remove background */
+    margin-bottom: 10px;
+    padding: 10px 15px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    color:black;
+}
+
+.center main section ul li:hover {
+    background-color: rgba(0,0,0,0.05); /* subtle hover effect */
+}
+
+.center main section ul li input[type="checkbox"] {
+    margin-right: 12px;
+    width: 18px;
+    height: 18px;
+}
+
+.center main section ul li span {
+    flex: 1;
+    font-size: 1rem;
+    color: #333;
+}
+
+.center main section ul li button {
+    background-color: #ff4d4d;
+    color: #fff;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.2s ease;
+}
+
+.center main section ul li button:hover {
+    background-color: #e60000;
+}
+
+/* Stylish, hidden-until-hover scrollbar for task lists */
+.center main section ul {
+    
+    overflow-y: auto;
+    transition: all 0.3s;
+}
+
+/* Webkit Browsers (Chrome, Edge, Safari) */
+.center main section ul::-webkit-scrollbar {
+    width: 8px;
+    background: transparent;        /* transparent track */
+}
+
+.center main section ul::-webkit-scrollbar-thumb {
+    background-color: rgba(10,132,255,0.6); /* stylish blue thumb */
+    border-radius: 6px;
+    opacity: 0;                     /* hidden initially */
+    transition: opacity 0.3s, background 0.3s;
+}
+
+.center main section ul:hover::-webkit-scrollbar-thumb {
+    opacity: 1;                     /* show on hover */
+    background-color: rgba(10,132,255,0.8); /* slightly brighter on hover */
+}
+
+.center main section ul::-webkit-scrollbar-track {
+    background: transparent;        /* transparent track */
 }

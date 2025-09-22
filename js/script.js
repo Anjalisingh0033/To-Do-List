@@ -15,15 +15,9 @@ const pdfBtn = document.getElementById("pdfBtn");
 const notifyBtn = document.getElementById("notifyBtn");
 const profileBtn = document.getElementById("profileBtn");
 
-// Today / Upcoming / Priority lists
-const todayList = document.getElementById("today-task-list");
-const upcomingList = document.getElementById("upcoming-task-list");
-const highList = document.getElementById("high-list");
-const mediumList = document.getElementById("medium-list");
-const lowList = document.getElementById("low-list");
-
-// Lists container (for multiple named lists)
-const listsContainer = document.getElementById("lists-container");
+// All Tasks page elements
+const pendingList = document.getElementById("pending-list");
+const completedList = document.getElementById("completed-list");
 
 // ====================== TASK HANDLING ======================
 
@@ -58,13 +52,11 @@ function saveTasks() {
 // ====================== TASK RENDERING ======================
 function renderAllTasks() {
     renderMainTaskList();
-    renderTodayTasks();
-    renderUpcomingTasks();
-    renderPriorityTasks();
     updateStats();
+    renderAllTasksPage();
 }
 
-// Main task list rendering
+// Main task list rendering (Home)
 function renderMainTaskList() {
     if (!taskList) return;
     taskList.innerHTML = "";
@@ -102,70 +94,32 @@ function updateStats() {
     progress.textContent = `⏳ Progress: ${percent}%`;
 }
 
-// ====================== TODAY / UPCOMING / PRIORITY ======================
-function renderTodayTasks() {
-    if (!todayList) return;
-    const today = new Date().toISOString().split("T")[0];
-    todayList.innerHTML = "";
-    tasks.forEach((task, index) => {
-        if (task.dueDate === today) {
-            const li = createTaskLi(task, index);
-            todayList.appendChild(li);
-        }
-    });
-}
+// ====================== ALL TASKS PAGE ======================
+function renderAllTasksPage() {
+    if (!pendingList || !completedList) return; // only if on all.html
 
-function renderUpcomingTasks() {
-    if (!upcomingList) return;
-    const today = new Date().toISOString().split("T")[0];
-    upcomingList.innerHTML = "";
-    tasks.forEach((task, index) => {
-        if (task.dueDate > today && !task.completed) {
-            const li = createTaskLi(task, index);
-            upcomingList.appendChild(li);
-        }
-    });
-}
-
-function renderPriorityTasks() {
-    if (!highList || !mediumList || !lowList) return;
-    highList.innerHTML = "";
-    mediumList.innerHTML = "";
-    lowList.innerHTML = "";
+    pendingList.innerHTML = "";
+    completedList.innerHTML = "";
 
     tasks.forEach((task, index) => {
-        if (!task.completed) {
-            const li = createTaskLi(task, index, false);
-            if (task.priority === "High") highList.appendChild(li);
-            else if (task.priority === "Medium") mediumList.appendChild(li);
-            else lowList.appendChild(li);
-        }
+        const li = document.createElement("li");
+
+        // checkbox
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.checked = task.completed;
+        checkbox.addEventListener("change", () => toggleTaskCompletion(index));
+        li.appendChild(checkbox);
+
+        // show only task title
+        const span = document.createElement("span");
+        span.textContent = task.title;
+        li.appendChild(span);
+
+        // append to proper section
+        if (task.completed) completedList.appendChild(li);
+        else pendingList.appendChild(li);
     });
-}
-
-// Create list item element
-function createTaskLi(task, index, showDueDate = true) {
-    const li = document.createElement("li");
-
-    const checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.checked = task.completed;
-    checkbox.addEventListener("change", () => toggleTaskCompletion(index));
-
-    li.appendChild(checkbox);
-
-    const text = `${task.title}` + (showDueDate && task.dueDate ? ` (${task.dueDate})` : "");
-    const span = document.createElement("span");
-    span.textContent = text + ` [${task.priority}]`;
-    li.appendChild(span);
-
-    // Optional color coding
-    if (task.completed) li.style.backgroundColor = "#c0c0c0";
-    else if (task.priority === "High") li.style.backgroundColor = "#f8d7da";
-    else if (task.priority === "Medium") li.style.backgroundColor = "#fff3cd";
-    else li.style.backgroundColor = "#d1ecf1";
-
-    return li;
 }
 
 // ====================== SEARCH ======================
@@ -173,10 +127,12 @@ if (searchForm && searchInput) {
     searchForm.addEventListener("submit", function (e) {
         e.preventDefault();
         const query = searchInput.value.toLowerCase();
-        taskList.querySelectorAll("li").forEach(li => {
-            const text = li.querySelector("span").textContent.toLowerCase();
-            li.style.display = text.includes(query) ? "flex" : "none";
-        });
+        if (taskList) {
+            taskList.querySelectorAll("li").forEach(li => {
+                const text = li.querySelector("span").textContent.toLowerCase();
+                li.style.display = text.includes(query) ? "flex" : "none";
+            });
+        }
     });
 }
 
@@ -222,4 +178,17 @@ if (addBtn && taskInput) {
 }
 
 // ====================== INITIAL RENDER ======================
-renderAllTasks();
+document.addEventListener("DOMContentLoaded", () => {
+    renderAllTasks();
+});
+
+// ====================== HAMBURGER ======================
+const hamburger = document.getElementById("hamburger");
+const navMenu = document.getElementById("navMenu");
+
+if (hamburger && navMenu) {
+    hamburger.addEventListener("click", () => {
+        hamburger.classList.toggle("active");
+        navMenu.classList.toggle("active");
+    });
+}

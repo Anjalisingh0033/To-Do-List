@@ -30,46 +30,33 @@
         </div>
     </header>
     
-    <div class="sidebaar">
-        <aside class="sidebar">
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="all.html">All Task</a></li>
-                <li><a href="today.html">Today</a></li>
-                <li><a href="upcoming.html">Upcoming</a></li>
-                <li><a href="priority.html">Priority</a></li>
-                
-              
-            </ul>
-        </aside>
+     <div class="sidebaar">
+    <aside class="sidebar">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="all.html" class="active">All Task</a></li>
+       
+      </ul>
+    </aside>
 
-        <div class="center">
-            <main>
-                <h1>All Tasks</h1>
+    <div class="center">
+      <main>
+        <h1>All Tasks</h1>
 
-                <section class="today-tasks">
-                    <h2>Today's Tasks</h2>
-                    <ul id="today-task-list"></ul>
-                </section>
+        <!-- Pending Tasks -->
+        <section>
+          <h2>🟡 Pending Tasks</h2>
+          <ul id="pending-list"></ul>
+        </section>
 
-                <section class="upcoming-tasks">
-                    <h2>Upcoming Tasks</h2>
-                    <ul id="upcoming-task-list"></ul>
-                </section>
-
-                <section class="pending-tasks">
-                    <h2>Pending Tasks</h2>
-                    <ul id="pending-task-list"></ul>
-                </section>
-
-                <section class="completed-tasks">
-                    <h2>Completed Tasks </h2>
-                    <ul id="completed-task-list"></ul>
-                </section>
-            </main>
-        </div>
+        <!-- Completed Tasks -->
+        <section>
+          <h2>✅ Completed Tasks</h2>
+          <ul id="completed-list"></ul>
+        </section>
+      </main>
     </div>
-    
+  </div>
     <footer class="footer">
         <div class="footer-container">
             <div class="stats">📊 Pending: 0 | Completed: 0</div>
@@ -82,6 +69,54 @@
             <p>💡 "Tip: Small progress every day adds up to big results."</p>
         </div>
     </footer>
+    <script>
+        function getTasks() {
+      return JSON.parse(localStorage.getItem("tasks")) || [];
+    }
+
+    // --- LOAD ALL TASKS ---
+    function loadAllTasks() {
+      let tasks = getTasks();
+      let today = new Date().toISOString().split("T")[0];
+
+      let todayList = document.getElementById("today-list");
+      let upcomingList = document.getElementById("upcoming-list");
+      let completedList = document.getElementById("completed-list");
+
+      todayList.innerHTML = "";
+      upcomingList.innerHTML = "";
+      completedList.innerHTML = "";
+
+      let pendingCount = 0, completedCount = 0;
+
+      tasks.forEach(task => {
+        let li = document.createElement("li");
+        li.textContent = task.text;
+
+        if(task.completed) {
+          completedList.appendChild(li);
+          completedCount++;
+        } else {
+          pendingCount++;
+          if(task.date === today) {
+            todayList.appendChild(li);
+          } else if(task.date > today) {
+            upcomingList.appendChild(li);
+          }
+        }
+      });
+
+      // Update footer stats
+      document.getElementById("stats").textContent = `📊 Pending: ${pendingCount} | Completed: ${completedCount}`;
+      let total = pendingCount + completedCount;
+      let percent = total ? Math.round((completedCount / total) * 100) : 0;
+      document.getElementById("progress").textContent = `⏳ Progress: ${percent}%`;
+    }
+
+    loadAllTasks();
+  
+
+    </script>
 
     <script src="js/script.js"></script>
     <script src="js/theme.js"></script>
